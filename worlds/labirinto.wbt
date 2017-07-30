@@ -1,0 +1,356 @@
+#VRML_SIM V7.4.0 utf8
+WorldInfo {
+  info [
+    "Description"
+    "Author: first name last name <e-mail>"
+    "Date: DD MMM YYYY"
+  ]
+  fast2d "enki"
+}
+Viewpoint {
+  orientation -0.145001 -0.962802 -0.228005 1.28501
+  position -1.95137 0.911728 0.679646
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+PointLight {
+  location 0 5 0
+}
+Solid {
+  translation 11.7795 0.05 0.168558
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 1 0.4 0
+        }
+      }
+      geometry Box {
+        size 0.1 0.1 0.1
+      }
+    }
+  ]
+  boundingObject Box {
+    size 0.1 0.1 0.1
+  }
+}
+SquareArena {
+  planSize 2 2
+  planTextureScale 5 5
+  wallXTranslation 1 0.05 0
+  wallSize 0.01 0.1 2
+}
+EPuck {
+  translation 0.434369 1e-05 -0.037341
+  controller "leaderController"
+  camera_windowPosition 0.0962889 0.187952
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Compass {
+    }
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.0962889 0.187952
+      pixelSize 3
+    }
+  ]
+}
+EPuck {
+  translation 0.425226 1e-05 0.142964
+  rotation 0 0 1 6.28319
+  controller "fuzzyController"
+  controllerArgs "0"
+  camera_windowPosition 0.0962889 0.187952
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0 0.831373 1
+              emissiveColor 0 0.831373 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0 0.831373 1
+              emissiveColor 0 0.831373 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0 0.831373 1
+              emissiveColor 0 0.831373 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.0962889 0.187952
+      pixelSize 3
+    }
+  ]
+}
+EPuck {
+  translation 0.416416 1e-05 0.419224
+  rotation -0.252625 0.967543 -0.00641909 -0.0502133
+  controller "fuzzyController"
+  controllerArgs "2"
+  camera_windowPosition 0.0972919 0.178404
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.337 1 0
+              emissiveColor 0.337 1 0
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.337 1 0
+              emissiveColor 0.337 1 0
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.337 1 0
+              emissiveColor 0.337 1 0
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.0962889 0.19759
+      pixelSize 3
+    }
+  ]
+}
+EPuck {
+  translation 0.312005 1e-05 0.643547
+  controller "fuzzyController"
+  controllerArgs "1"
+  camera_windowPosition 0.0962889 0.187952
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              emissiveColor 1 1 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              emissiveColor 1 1 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              emissiveColor 1 1 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.903711 0.1625
+      pixelSize 3
+    }
+  ]
+}

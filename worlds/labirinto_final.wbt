@@ -1,0 +1,458 @@
+#VRML_SIM V7.4.0 utf8
+WorldInfo {
+  info [
+    "Description"
+    "Author: first name last name <e-mail>"
+    "Date: DD MMM YYYY"
+  ]
+  fast2d "enki"
+}
+Viewpoint {
+  orientation 0.75429 0.557639 0.346534 5.74079
+  position -1.03842 1.61822 3.06661
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+PointLight {
+  location 0 5 0
+}
+SquareArena {
+  planSize 2 2
+  planTextureScale 5 5
+  wallXTranslation 1 0.05 0
+  wallSize 0.01 0.1 2
+}
+EPuck {
+  translation 0.184945 1e-05 0.253651
+  controller "leaderController"
+  camera_windowPosition 0.0962889 0.187952
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Compass {
+    }
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.0962889 0.187952
+      pixelSize 3
+    }
+  ]
+}
+EPuck {
+  translation 0.183014 1e-05 0.41397
+  rotation 0 0 1 6.28319
+  controller "fuzzyController"
+  controllerArgs "0"
+  camera_windowPosition 0.0962889 0.187952
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0 0.831373 1
+              emissiveColor 0 0.831373 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0 0.831373 1
+              emissiveColor 0 0.831373 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0 0.831373 1
+              emissiveColor 0 0.831373 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.0962889 0.187952
+      pixelSize 3
+    }
+  ]
+}
+EPuck {
+  translation 0.167763 1e-05 0.556713
+  rotation -0.252625 0.967543 -0.00641909 -0.0502133
+  controller "fuzzyController"
+  controllerArgs "2"
+  camera_windowPosition 0.0972919 0.178404
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.337 1 0
+              emissiveColor 0.337 1 0
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.337 1 0
+              emissiveColor 0.337 1 0
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 0.337 1 0
+              emissiveColor 0.337 1 0
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.0962889 0.19759
+      pixelSize 3
+    }
+  ]
+}
+EPuck {
+  translation 0.147234 1e-05 0.720682
+  controller "fuzzyController"
+  controllerArgs "1"
+  camera_windowPosition 0.0962889 0.187952
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              emissiveColor 1 1 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              emissiveColor 1 1 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 1 1
+              emissiveColor 1 1 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.903711 0.1625
+      pixelSize 3
+    }
+  ]
+}
+Solid {
+  translation 0.273264 0 -0.412005
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 0.8 0 0
+        }
+      }
+      geometry Cylinder {
+        height 0.4
+        radius 0.01
+      }
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.4
+    radius 0.01
+  }
+}
+Solid {
+  translation -0.304923 0 -0.806146
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 0.8 0 0
+        }
+      }
+      geometry Cylinder {
+        height 0.4
+        radius 0.01
+      }
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.4
+    radius 0.01
+  }
+}
+Solid {
+  translation -0.58 0 0
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 0.8 0 0
+        }
+      }
+      geometry Cylinder {
+        height 0.4
+        radius 0.01
+      }
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.4
+    radius 0.01
+  }
+}
+Solid {
+  translation -0.525195 0 -0.43004
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 0.8 0 0
+        }
+      }
+      geometry Cylinder {
+        height 0.4
+        radius 0.01
+      }
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.4
+    radius 0.01
+  }
+}
+Solid {
+  translation 0.0309889 -4.44089e-16 -0.649906
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 0.8 0 0
+        }
+      }
+      geometry Cylinder {
+        height 0.4
+        radius 0.01
+      }
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.4
+    radius 0.01
+  }
+}
+Solid {
+  translation 0.134825 2.22045e-16 0.0342405
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          emissiveColor 0.8 0 0
+        }
+      }
+      geometry Cylinder {
+        height 0.4
+        radius 0.01
+      }
+    }
+  ]
+  boundingObject Cylinder {
+    height 0.4
+    radius 0.01
+  }
+}

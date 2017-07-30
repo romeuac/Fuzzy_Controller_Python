@@ -1,0 +1,98 @@
+#VRML_SIM V7.4.0 utf8
+WorldInfo {
+  info [
+    "Description"
+    "Author: first name last name <e-mail>"
+    "Date: DD MMM YYYY"
+  ]
+}
+Viewpoint {
+  orientation -0.313419 0.934512 0.168686 1.26304
+  position 0.801405 0.404424 0.315254
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+PointLight {
+  location 0 5 0
+}
+DEF FLOOR CheckeredFloor {
+}
+EPuck {
+  translation 0.05 0 0
+  controller "leaderController"
+  camera_windowPosition 0.0962889 0.179969
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.851425 0.137715
+      pixelSize 3
+    }
+  ]
+}
+EPuck {
+  translation 0.05 0 0.2
+  controller "fuzzyController"
+  camera_windowPosition 0.0972919 0.178404
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.849418 0.131456
+      pixelSize 3
+    }
+  ]
+}

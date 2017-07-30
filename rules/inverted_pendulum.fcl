@@ -1,0 +1,118 @@
+FUNCTION_BLOCK Inverted_Pendulum
+
+    VAR_INPUT
+        Phi : REAL; (* description='angle',min=0,max=360,unit='degrees'*)
+        dPhi_dT : REAL; (* description='angle velocity',min=-600,max=600,unit='degrees per second'*)
+        X : REAL; (* description='position',min=-20,max=20,unit='meter'*)
+        dX_dT : REAL; (* description='velocity',min=-10,max=10,unit='meter per second'*)
+    END_VAR
+
+    VAR_OUTPUT
+        a : REAL; (* description='acceleration',min=-50,max=50,unit='meter per second^2' *)
+    END_VAR
+
+    FUZZIFY Phi
+        TERM up_more_right :=  (0,0) (30,1) (60,0);
+        TERM up_right := (30,0) (60,1) (90,0);
+        TERM up := (60,0) (90,1) (120,0);
+        TERM up_left := (90,0) (120,1) (150,0);
+        TERM up_more_left := (120,0) (150,1) (180,0);
+        TERM down_more_left := (180,0) (210,1) (240,0);
+        TERM down_left := (210,0) (240,1) (270,0);
+        TERM down := (240,0) (270,1) (300,0);
+        TERM down_right := (270,0) (300,1) (330,0);
+        TERM down_more_right := (300,0) (330,1) (360,0);
+    END_FUZZIFY
+
+    FUZZIFY dPhi_dT
+        TERM cw_fast := (-600,1) (-300,0);
+        TERM cw_slow := (-600,0) (-300,1) (0,0);
+        TERM stop := (-300,0) (0,1) (300,0);
+        TERM ccw_slow := (0,0) (300,1) (600,0);
+        TERM ccw_fast := (300,0) (600,1);
+    END_FUZZIFY
+
+    FUZZIFY X
+        TERM left_far := (-20,1) (-10,0);
+        TERM left_near := (-20,0) (-5,1) (0,0);
+        TERM stop := (-5,0) (0,1) (5,0);
+        TERM right_near := (0,0) (5,1) (20,0);
+        TERM right_far := (10,0) (20,1);
+    END_FUZZIFY
+
+    FUZZIFY dX_dT
+        TERM left_fast := (-10,1) (-5,0);
+        TERM left_slow := (-10,0) (-2,1) (0,0);
+        TERM stop := (-2,0) (0,1) (2,0);
+        TERM right_slow := (0,0) (2,1) (10,0);
+        TERM right_fast := (5,0) (10,1);
+    END_FUZZIFY
+
+    DEFUZZIFY a
+        TERM left_fast := (-50,0) (-20,1) (-10,0);
+        TERM left_slow := (-20,0) (-10,1) (0,0);
+        TERM stop := (-10,0) (0,1) (10,0);
+        TERM right_slow := (0,0) (10,1) (20,0);
+        TERM right_fast := (10,0) (20,1) (50,0);
+        ACCU : MAX; (* AlgebraicSum *)
+        METHOD : COG;
+        DEFAULT := 0;
+    END_DEFUZZIFY
+
+    RULEBLOCK Inverted_Pendulum
+        AND : AlgebraicProduct;
+        OR : MAX;
+        RULE 1 (* stop *):
+            IF 
+                (Phi IS up AND dPhi_dT IS stop) 
+                OR (Phi IS up_right AND dPhi_dT IS ccw_slow)
+                OR (Phi IS up_left AND dPhi_dT IS cw_slow)
+            THEN a IS stop;
+
+        RULE 2 (* tilts right *): 
+            IF 
+                NOT (
+                    AlgebraicSum(X IS left_near,X IS left_far)
+                    AND EinsteinSum(dX_dT IS left_slow,dX_dT IS left_fast)
+                ) 
+                AND Phi IS up_right
+            THEN a IS right_slow;
+
+        RULE 3 (* tilts left *): 
+            IF 
+                NOT (
+                    AlgebraicSum(X IS right_near,X IS right_far)
+                    AND DombiUnion[0.25](dX_dT IS right_slow,dX_dT IS right_fast)
+                )
+                AND Phi IS up_left
+            THEN a IS right_slow;
+
+        RULE 4 (* far right *): IF Phi IS up_more_right THEN a IS right_fast;
+
+        RULE 5 (* far left *): IF Phi IS up_more_left THEN a IS left_fast;
+
+        RULE 6 (* accelerate cw if down *): 
+            IF
+                Phi IS down
+                AND dPhi_dT IS cw_slow
+                AND dPhi_dT IS cw_slow
+            THEN a IS right_slow;
+
+        RULE 7 (* accelerate ccw if down*): 
+            IF
+                Phi IS down
+                AND dPhi_dT IS ccw_slow
+                AND dPhi_dT IS ccw_slow
+            THEN a IS left_slow;
+
+    END_RULEBLOCK
+
+END_FUNCTION_BLOCK
+(*
+        # set defuzzification method and default norms
+        INF = AlgebraicProduct()
+        ACC = AlgebraicSum()
+        COM = AlgebraicSum()
+        CER = AlgebraicProduct()
+        COG = fuzzy.defuzzify.COG.COG(INF=INF,ACC=ACC,failsafe = 0)
+*)

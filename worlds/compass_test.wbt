@@ -1,0 +1,104 @@
+#VRML_SIM V7.4.0 utf8
+WorldInfo {
+  info [
+    "Description"
+    "Author: first name last name <e-mail>"
+    "Date: DD MMM YYYY"
+  ]
+}
+Viewpoint {
+  orientation -0.118353 -0.983485 -0.136932 1.34145
+  position -5.03556 1.39456 0.504969
+}
+Background {
+  skyColor [
+    0.4 0.7 1
+  ]
+}
+PointLight {
+  location 0 5 0
+}
+Floor {
+  size 16 16
+  texture [
+    "textures/bricks.png"
+  ]
+}
+EPuck {
+  translation 0.108412 -2.22045e-16 -0.249401
+  controller "leaderController"
+  camera_windowPosition 0.0962889 0.187952
+  camera_width 64
+  camera_height 52
+  turretSlot [
+    Compass {
+    }
+    Solid {
+      translation 0.0007 -0.017 0.026
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation 0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    Solid {
+      translation -0.035 -0.017 0
+      rotation 0 1 0 1.5708
+      scale 0.8 0.8 0.8
+      children [
+        Shape {
+          appearance Appearance {
+            material Material {
+              diffuseColor 1 0 1
+              emissiveColor 1 0 1
+              specularColor 1 0 1
+            }
+          }
+          geometry Box {
+            size 0.01 0.03 0.003
+          }
+        }
+      ]
+    }
+    InertialUnit {
+      name "inertial_unit"
+    }
+    GPS {
+    }
+    Display {
+      name "display_teste"
+      height 52
+      windowPosition 0.903711 0.187952
+      pixelSize 3
+    }
+  ]
+}

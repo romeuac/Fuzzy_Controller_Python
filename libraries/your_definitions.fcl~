@@ -1,0 +1,47 @@
+FUNCTION_BLOCK dummy
+ 
+    VAR_INPUT
+        Our_Health :     REAL; (* RANGE(0 .. 100) *)
+        Enemy_Health:    REAL; (* RANGE(0 .. 100) *)
+    END_VAR
+ 
+    VAR_OUTPUT
+        Aggressiveness : REAL; (* RANGE(0 .. 4) *)
+    END_VAR
+ 
+    FUZZIFY Our_Health
+        TERM Near_Death := (0, 0) (0, 1) (50, 0) ;
+        TERM Good := (14, 0) (50, 1) (83, 0) ;
+        TERM Excellent := (50, 0) (100, 1) (100, 0) ;
+    END_FUZZIFY
+ 
+    FUZZIFY Enemy_Health
+        TERM Near_Death := (0, 0) (0, 1) (50, 0) ;
+        TERM Good := (14, 0) (50, 1) (83, 0) ;
+        TERM Excellent := (50, 0) (100, 1) (100, 0) ;
+    END_FUZZIFY
+ 
+    DEFUZZIFY Aggressiveness
+        TERM Run_Away := 1 ;
+        TERM Fight_Defensively := 2 ;
+        TERM All_Out_Attack := 3 ;
+        ACCU:MAX;
+        METHOD: COGS;(*MoM;*)
+        DEFAULT := 0;
+    END_DEFUZZIFY
+ 
+    RULEBLOCK first
+        AND:MIN;
+        (*ACCU:MAX;*)
+        RULE 0: IF (Our_Health IS Near_Death) AND (Enemy_Health IS Near_Death) THEN (Aggressiveness IS Fight_Defensively);
+        RULE 1: IF (Our_Health IS Near_Death) AND (Enemy_Health IS Good) THEN (Aggressiveness IS Run_Away);
+        RULE 2: IF (Our_Health IS Near_Death) AND (Enemy_Health IS Excellent) THEN (Aggressiveness IS Run_Away);
+        RULE 3: IF (Our_Health IS Good) AND (Enemy_Health IS Near_Death) THEN (Aggressiveness IS All_Out_Attack);
+        RULE 4: IF (Our_Health IS Good) AND (Enemy_Health IS Good) THEN (Aggressiveness IS Fight_Defensively);
+        RULE 5: IF (Our_Health IS Good) AND (Enemy_Health IS Excellent) THEN (Aggressiveness IS Fight_Defensively);
+        RULE 6: IF (Our_Health IS Excellent) AND (Enemy_Health IS Near_Death) THEN (Aggressiveness IS All_Out_Attack);
+        RULE 7: IF (Our_Health IS Excellent) AND (Enemy_Health IS Good) THEN (Aggressiveness IS All_Out_Attack);
+        RULE 8: IF (Our_Health IS Excellent) AND (Enemy_Health IS Excellent) THEN (Aggressiveness IS Fight_Defensively);
+    END_RULEBLOCK
+ 
+END_FUNCTION_BLOCK

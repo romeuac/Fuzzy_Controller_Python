@@ -1,0 +1,224 @@
+# File:          leaderController.py
+# Date:          
+# Description:   
+# Author:        
+# Modifications: 
+
+import os, sys
+lib_path = os.path.abspath('../../libraries')
+sys.path.append(lib_path)
+
+from controller import DifferentialWheels
+import fuzzyMethods as fm
+
+
+import numpy as np
+import numpy.linalg as alglin
+
+import cv2
+
+
+from math import atan2, sin, pi, ceil
+from random import randint
+import operator
+
+def dump(obj):
+      for attr in dir(obj):
+	print "obj.%s = %s" % (attr, getattr(obj, attr))
+
+
+class Enumerate(object):
+  def __init__(self, names):
+    for number, name in enumerate(names.split()):
+      setattr(self, name, number)
+
+# Here is the main class of your controller.
+# This class defines how to initialize and how to run your controller.
+# Note that this class derives Robot and so inherits all its functions
+class leaderController (DifferentialWheels):
+  
+  Mode = Enumerate('STANDARD STOP GPS RANDOM')
+  timeStep = 64
+  maxSpeed = 100.0  
+  limDist = 100.0
+  square_edge = 6e3
+  dir_flag = 1
+  counter = 0
+  flag_counter = 0
+  reference_dir = np.array(([1,0]))
+  old_encoder_value = 0
+  #TOL = 1e-3
+  
+  # User defined function for initializing and running
+  # the fuzzyController class
+  
+  def init(self):
+    ### Set points
+    self.mode = self.Mode.STANDARD
+    #self.mode = self.Mode.STOP
+    #self.mode = self.Mode.RANDOM
+    
+    ### Compass initialization
+    self.compass = self.getCompass('compass')
+    self.compass.enable(self.timeStep)    
+    
+    ### Encoders initialization
+    self.enableEncoders(self.timeStep)
+
+    ### Proximity sensors initialization
+    self.ps = [self.getDistanceSensor(sensor_name) for
+		  sensor_name in ['ps' + str(i) for i in range(8)]]
+    for sensor in self.ps:
+      sensor.enable(self.timeStep)
+      
+    ### Obstacle avoidance direction dictionary
+    ### dir_id : (left_wheel_speed, right_wheel_speed)
+    self.avoidance_directions = {
+      0 : (1,0.9), 1 : (1,0.7),  2 : (1,0.4), 
+      3 : (1,-0.1), 4 : (-0.1,1),  5 : (0.4,1), 
+      6 : (0.7,1), 7 : (0.9,1)
+    }     
+    
+  def run(self):
+    speeds = {
+      "left_wheel"  : 0.0,
+      "right_wheel" : 0.0
+    }
+    time = 0.0
+    k_right = 2
+    k_left = 2   
+    
+    
+    # Main loop
+    while True:
+      
+      
+      ### SENSORS MESURES
+      [x_mag, _, z_mag] = self.compass.getValues()
+      current_dir = np.array(([x_mag, z_mag]))
+      
+      if self.mode == self.Mode.STANDARD:
+	print 'contador', self.counter
+	
+	if self.flag_counter == 2:
+	  self.reference_dir = self.getNextDirection()
+	  self.flag_counter = 0
+	  print 'entrei aqui'
+	
+	if np.allclose(self.reference_dir, current_dir, 2e-1, 2e-1):
+	  if self.counter < self.square_edge:
+	    if self.flag_counter == 0:
+	      self.setEncoders(0, 0)
+	      self.old_encoder_value = 0
+	    
+	    self.counter += self.getLeftEncoder() - self.old_encoder_value
+	    speeds["left_wheel"] = 6*self.maxSpeed
+	    speeds["right_wheel"] = 6*self.maxSpeed 
+	    self.flag_counter = 1
+	    self.old_encoder_value = self.getLeftEncoder() 
+
+	  else:
+	    speeds["left_wheel"] = 0
+	    speeds["right_wheel"] = 0
+	    self.setEncoders(0,0)
+	    self.old_encoder_value = 0
+	    self.counter = 0
+	    self.flag_counter = 2
+	    continue
+
+	else:
+	  theta = 180*np.arccos(np.dot(self.reference_dir,current_dir))/pi
+	  if theta > 5:
+	    speeds["left_wheel"] = -6*self.maxSpeed
+	    speeds["right_wheel"] = 6*self.maxSpeed 
+	  elif theta < -5:
+	    speeds["left_wheel"] = 6*self.maxSpeed
+	    speeds["right_wheel"] = -6*self.maxSpeed 	       	    
+	  self.flag_counter = 0
+	  self.setEncoders(0,0)
+	  self.old_encoder_value = 0
+	  
+      elif self.mode == self.Mode.RANDOM:
+		    
+	
+	if time % 40 == 0:
+	  move_pattern = randint(0,24) % 5
+	  
+	  if move_pattern == 0:
+	    k_right = 6 
+	    k_left = 4
+	  elif move_pattern == 1:
+	    k_right = 4
+	    k_left = 6
+	  elif move_pattern == 2:
+	    k_right = 0
+	    k_left = 2
+	  elif move_pattern == 3:
+	    k_right = 2
+	    k_left = 0    
+	  else:
+	    k_right = 6
+	    k_left = 6
+	  
+	speeds["left_wheel"] = k_left*self.maxSpeed
+	speeds["right_wheel"] = k_right*self.maxSpeed
+	
+	
+      elif self.mode == self.Mode.STOP:
+	speeds["left_wheel"] = 0
+	speeds["right_wheel"] = 0
+	
+      
+      ### Obstacle identification
+      if (any(elem.getValue() > self.limDist for elem in self.ps)) and (self.mode != (self.Mode.STOP or self.Mode.Search)):
+	i_max, max_sensor = max(enumerate(elem.getValue() for elem in self.ps), key=operator.itemgetter(1))
+	#i_min, min_sensor = min(enumerate(elem.getValue() for elem in self.ps), key=operator.itemgetter(1))
+	# HACK TENTANDO PEGAR A DIRECAO DIAMETRALMENTE OPOSTA
+	dir_id = (i_max + 3) % 7 #TODO VER SE EH MODELO 8 OU 7, E VER SE 3 EH VALIDO PRA TODOS OS CASOS, MEIO TRICKY
+	(left_speed, right_speed) = self.avoidance_directions.get(dir_id)
+	
+	speeds["left_wheel"] = (1/9)*speeds["left_wheel"] + 3*self.maxSpeed*left_speed
+	speeds["right_wheel"] = (1/9)*speeds["right_wheel"] + 3*self.maxSpeed*right_speed	
+	print "ESTOU EVITANDO OBSTACULO"
+	
+	
+      
+      #### SEND CALCULATED CONTROL TO THE WHEEL
+      self.setSpeed(speeds["left_wheel"], speeds["right_wheel"])
+      
+      
+      ### Perform a simulation step of self.timeStep milliseconds
+      ### and leave the loop when the simulation is over
+      if self.step(self.timeStep) == -1: break
+      time = time + 1.0
+      
+
+      
+    
+  def getNextDirection(self):
+    if self.dir_flag % 4 == 0:
+      direction = np.array(([1,0]))
+    elif self.dir_flag % 4 == 1:
+      direction = np.array(([0,1]))
+    elif self.dir_flag % 4 == 2:
+      direction = np.array(([-1,0]))
+    elif self.dir_flag % 4 == 3:
+      direction = np.array(([0,-1]))
+      
+    self.dir_flag += 1
+    return direction
+    
+
+      
+      ### Enter here exit cleanup code
+      
+# The main program starts from here
+
+# This is the main program of your controller.
+# It creates an instance of your Robot subclass, launches its
+# function(s) and destroys it at the end of the execution.
+# Note that only one instance of Robot should be created in
+# a controller program.
+controller = leaderController()
+controller.init() 
+controller.run()

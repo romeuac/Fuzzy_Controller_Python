@@ -1,0 +1,101 @@
+FUNCTION_BLOCK basicMotion
+ 
+    (* 		      ----------		CRISPY INPUTS 	        ----------		*)
+    
+    (* Controller input *)
+    VAR_INPUT
+        Depth_Error:     		REAL; 		(*RANGE(-1 ... 1), this value was normalized *)
+	Horizontal_Distance_Error:     	REAL; 		(*RANGE(-1 ... 1), this value was normalized by using camera.width *)
+    END_VAR
+ 
+    (* Controller output *)
+    VAR_OUTPUT
+        Left_Wheel_Speed :		REAL; 		(* RANGE(-1 .. 1), this value will be multliplied by max speed *)
+	Right_Wheel_Speed :		REAL; 		(* RANGE(-1 .. 1), this value will be multliplied by max speed *)
+    END_VAR
+ 
+ 
+    (* 		      ----------		FUZZIFIES 	        ----------		*)
+    
+    FUZZIFY Depth_Error
+	TERM Far 	:= (-1.0, 1.0) (-0.7, 1.0) (-0.1, 0.0) ;
+        TERM Excellent 	:= (-0.2, 0.0) ( 0.0, 1.0) ( 0.2, 0.0) ;
+        TERM Close 	:= ( 0.1, 0.0) ( 0.7, 1.0) ( 1.0, 1.0) ;   
+    END_FUZZIFY
+ 
+    FUZZIFY Horizontal_Distance_Error
+	TERM Left 	:= (-1.0, 1.0) (-0.7, 1.0) (-0.1, 0.0) ;
+        TERM Excellent 	:= (-0.2, 0.0) ( 0.0, 1.0) ( 0.2, 0.0) ;
+        TERM Right 	:= ( 0.1, 0.0) ( 0.7, 1.0) ( 1.0, 1.0) ;
+    END_FUZZIFY
+ 
+ 
+ 
+    (* 		      ----------		DEFUZZIFIES 	        ----------		*)
+   
+   
+    DEFUZZIFY Left_Wheel_Speed
+	TERM Quickly_Backward 	:= 	(-1.0, 0.0) (-0.7, 1.0) (-0.4, 0.0) ;
+	TERM Slowly_Backward 	:= 	(-0.7, 0.0) (-0.4, 1.0) (-0.1, 0.0) ;
+	TERM Stop 		:= 	(-0.2, 0.0) ( 0.0, 1.0) ( 0.2, 0.0) ;
+	TERM Slowly_Forward 	:= 	( 0.1, 0.0) ( 0.4, 1.0) ( 0.7, 0.0) ;
+        TERM Quickly_Forward 	:= 	( 0.4, 0.0) ( 0.7, 1.0) ( 1.0, 0.0) ;
+	
+        ACCU:MAX;
+        METHOD: COG; (*MoM;*)
+        DEFAULT := 0;
+    END_DEFUZZIFY
+    
+    DEFUZZIFY Right_Wheel_Speed
+	TERM Quickly_Backward 	:= 	(-1.0, 0.0) (-0.7, 1.0) (-0.4, 0.0) ;
+	TERM Slowly_Backward 	:= 	(-0.7, 0.0) (-0.4, 1.0) (-0.1, 0.0) ;
+	TERM Stop 		:= 	(-0.2, 0.0) ( 0.0, 1.0) ( 0.2, 0.0) ;
+	TERM Slowly_Forward 	:= 	( 0.1, 0.0) ( 0.4, 1.0) ( 0.7, 0.0) ;
+        TERM Quickly_Forward 	:= 	( 0.4, 0.0) ( 0.7, 1.0) ( 1.0, 0.0) ;
+     
+	
+        ACCU:MAX;
+        METHOD: COG; (*MoM;*)
+        DEFAULT := 0;
+    END_DEFUZZIFY
+   
+    (* 		      ----------		  RULES 	        ----------		*)
+    
+    RULEBLOCK ONE
+	AND : AlgebraicProduct;
+	
+	
+	(* 	      ----------	ALIGNED RULES BEGIN           --------		        *)
+	
+
+        RULE 0: IF (Depth_Error IS Far) AND (Horizontal_Distance_Error IS Excellent) 
+        	THEN Left_Wheel_Speed IS Quickly_Forward, Right_Wheel_Speed IS Quickly_Forward;
+        	
+        RULE 1: IF (Depth_Error IS Excellent) AND (Horizontal_Distance_Error IS Excellent) 
+		THEN Left_Wheel_Speed IS Stop, Right_Wheel_Speed IS Stop;
+        	
+        RULE 2: IF (Depth_Error IS Close) AND (Horizontal_Distance_Error IS Excellent) 
+		THEN Left_Wheel_Speed IS Quickly_Backward, Right_Wheel_Speed IS Quickly_Backward;
+
+		
+	(* 	      ----------	ALIGNED RULES END           --------		        *)	
+	
+	
+	
+	(* 	      ----------	DISALIGNED RULES BEGIN           --------	        *)
+	
+        RULE 3: IF Horizontal_Distance_Error IS Left
+        	THEN Left_Wheel_Speed IS Quickly_Forward, Right_Wheel_Speed IS Slowly_Forward;
+
+        RULE 4: IF Horizontal_Distance_Error IS Right
+        	THEN Left_Wheel_Speed IS Slowly_Forward, Right_Wheel_Speed IS Quickly_Forward;
+        
+        
+        	
+	(* 	      ----------	DISALIGNED RULES END           --------		        *)	
+        	
+	
+		
+    END_RULEBLOCK
+ 
+END_FUNCTION_BLOCK
